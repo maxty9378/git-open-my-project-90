@@ -6,9 +6,9 @@
     const WIDGET_CONFIG = {
         baseUrl: 'https://sns-welcome.vercel.app',
         containerId: 'sns-welcome-widget',
-        minHeight: '600px',
-        borderRadius: '12px',
-        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+        minHeight: '100vh',
+        borderRadius: '0px',
+        boxShadow: 'none',
         background: '#111827'
     };
 
@@ -17,8 +17,9 @@
         const styles = `
             .sns-welcome-widget-container {
                 width: 100%;
-                max-width: 400px;
-                margin: 0 auto;
+                height: 100vh;
+                margin: 0;
+                padding: 0;
                 background: ${WIDGET_CONFIG.background};
                 border-radius: ${WIDGET_CONFIG.borderRadius};
                 box-shadow: ${WIDGET_CONFIG.boxShadow};
@@ -34,6 +35,7 @@
                 border: none;
                 border-radius: ${WIDGET_CONFIG.borderRadius};
                 background: ${WIDGET_CONFIG.background};
+                display: block;
             }
             
             .sns-welcome-widget-loading {
@@ -45,6 +47,7 @@
                 font-family: Arial, sans-serif;
                 font-size: 16px;
                 z-index: 10;
+                text-align: center;
             }
             
             .sns-welcome-widget-spinner {
@@ -62,15 +65,44 @@
                 100% { transform: rotate(360deg); }
             }
             
-            @media (max-width: 768px) {
+            /* Полноэкранные стили */
+            body.sns-widget-fullscreen {
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            
+            body.sns-widget-fullscreen .sns-welcome-widget-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 9999;
+            }
+            
+            /* Обеспечиваем корректное отображение на всех устройствах */
+            @media screen and (max-width: 768px) {
                 .sns-welcome-widget-container {
-                    max-width: 100%;
-                    border-radius: 0;
-                    box-shadow: none;
+                    height: 100vh;
+                    min-height: 100vh;
+                    max-height: 100vh;
                 }
                 
                 .sns-welcome-widget-iframe {
-                    border-radius: 0;
+                    height: 100vh;
+                    min-height: 100vh;
+                }
+            }
+            
+            @media screen and (max-height: 600px) {
+                .sns-welcome-widget-container {
+                    height: 100vh;
+                    min-height: 100vh;
+                }
+                
+                .sns-welcome-widget-iframe {
+                    height: 100vh;
                     min-height: 100vh;
                 }
             }
@@ -95,10 +127,23 @@
                     title="SNS Welcome Course"
                     frameborder="0"
                     allowfullscreen
+                    allow="autoplay; clipboard-read; clipboard-write; fullscreen; picture-in-picture; web-share"
                     loading="lazy">
                 </iframe>
             </div>
         `;
+    }
+
+    // Функция для полноэкранного режима
+    function enableFullscreen() {
+        document.body.classList.add('sns-widget-fullscreen');
+        
+        // Скрываем скроллбары страницы
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        
+        // Сохраняем оригинальное состояние для возможного восстановления
+        window.SNSWelcomeWidget._originalOverflow = originalOverflow;
     }
 
     // Инициализация виджета
@@ -114,6 +159,12 @@
         // Создать стили
         createWidgetStyles();
         
+        // Включить полноэкранный режим если контейнер занимает всю страницу
+        const containerRect = container.getBoundingClientRect();
+        if (containerRect.height >= window.innerHeight * 0.8 || container.closest('body')) {
+            enableFullscreen();
+        }
+        
         // Вставить HTML
         container.innerHTML = createWidgetHTML();
         
@@ -125,6 +176,7 @@
             if (loading) {
                 loading.style.display = 'none';
             }
+            console.log('SNS Welcome Widget успешно загружен');
         });
 
         // Обработка ошибок загрузки
@@ -142,7 +194,20 @@
             }
         });
 
-        console.log('SNS Welcome Widget успешно инициализирован');
+        console.log('SNS Welcome Widget инициализирован');
+    }
+
+    // Функция для восстановления оригинального состояния страницы
+    function destroy() {
+        document.body.classList.remove('sns-widget-fullscreen');
+        if (window.SNSWelcomeWidget._originalOverflow !== undefined) {
+            document.body.style.overflow = window.SNSWelcomeWidget._originalOverflow;
+        }
+        
+        const container = document.getElementById(WIDGET_CONFIG.containerId);
+        if (container) {
+            container.innerHTML = '';
+        }
     }
 
     // Автоматическая инициализация при загрузке DOM
@@ -152,9 +217,10 @@
         initWidget();
     }
 
-    // Экспорт функции инициализации для ручного вызова
+    // Экспорт функций для ручного управления
     window.SNSWelcomeWidget = {
         init: initWidget,
+        destroy: destroy,
         config: WIDGET_CONFIG
     };
 
