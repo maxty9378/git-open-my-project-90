@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Calendar, Building2, Globe, Smartphone, Mail, Database, Layout, Info, ArrowLeft, ChevronLeft, ChevronRight, MessageCircle, Heart, Sparkles, ChevronDown } from 'lucide-react';
 import { NotificationBanner } from '../components/NotificationBanner';
@@ -412,7 +413,7 @@ const Index = () => {
       >
         {schedule[currentDay]?.schedule.map(renderScheduleItem)}
         {/* Spacer for bottom navigation */}
-        <div className="h-32" />
+        <div className="h-40" />
       </div>
     </div>
   );
@@ -460,7 +461,7 @@ const Index = () => {
         </div>
         
         {/* Spacer for bottom navigation */}
-        <div className="h-32" />
+        <div className="h-40" />
       </div>
     </div>
   );
@@ -488,7 +489,7 @@ const Index = () => {
           <ModeratorCard />
           
           {/* Spacer for bottom navigation */}
-          <div className="h-32" />
+          <div className="h-40" />
         </div>
       </div>
     </div>
@@ -530,7 +531,7 @@ const Index = () => {
             </div>
             
             {/* Spacer for bottom navigation */}
-            <div className="h-32" />
+            <div className="h-40" />
           </div>
         </div>
       </div>
