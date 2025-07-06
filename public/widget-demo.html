@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNS Welcome Widget - Демо</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .demo-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .demo-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            align-items: start;
+        }
+        .demo-info {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .code-example {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        @media (max-width: 768px) {
+            .demo-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>SNS Welcome Course Widget</h1>
+            <p>Встраиваемый виджет для Tilda и других платформ</p>
+        </div>
+        
+        <div class="demo-content">
+            <div class="demo-info">
+                <h2>🚀 Инструкция по встраиванию</h2>
+                
+                <h3>1. Для Tilda</h3>
+                <p>Добавьте блок <strong>"HTML"</strong> или <strong>"Другое → HTML"</strong> и вставьте следующий код:</p>
+                
+                <div class="code-example">
+&lt;!-- Контейнер для виджета --&gt;
+&lt;div id="sns-welcome-widget"&gt;&lt;/div&gt;
+
+&lt;!-- Скрипт виджета --&gt;
+&lt;script src="https://sns-welcome.vercel.app/widget.min.js"&gt;&lt;/script&gt;
+                </div>
+                
+                <h3>2. Для других сайтов</h3>
+                <p>Вставьте код в любое место на вашей странице:</p>
+                
+                <div class="code-example">
+&lt;!-- Вариант 1: Автоматическая загрузка --&gt;
+&lt;div id="sns-welcome-widget"&gt;&lt;/div&gt;
+&lt;script src="https://sns-welcome.vercel.app/widget.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Вариант 2: Ручная инициализация --&gt;
+&lt;div id="sns-welcome-widget"&gt;&lt;/div&gt;
+&lt;script src="https://sns-welcome.vercel.app/widget.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  // Ручная инициализация (опционально)
+  SNSWelcomeWidget.init();
+&lt;/script&gt;
+                </div>
+                
+                <h3>3. Настройка размеров</h3>
+                <p>Виджет адаптивный и автоматически подстраивается под размер контейнера:</p>
+                <ul>
+                    <li><strong>Десктоп:</strong> максимальная ширина 400px, высота 600px</li>
+                    <li><strong>Мобильные:</strong> занимает всю ширину экрана, высота на весь экран</li>
+                </ul>
+                
+                <h3>4. Дополнительные возможности</h3>
+                <div class="code-example">
+&lt;!-- Кастомный ID контейнера --&gt;
+&lt;div id="my-custom-widget"&gt;&lt;/div&gt;
+&lt;script&gt;
+  // Изменить ID контейнера
+  SNSWelcomeWidget.config.containerId = 'my-custom-widget';
+  SNSWelcomeWidget.init();
+&lt;/script&gt;
+                </div>
+                
+                <h3>🎯 Преимущества виджета</h3>
+                <ul>
+                    <li>✅ Полностью адаптивный дизайн</li>
+                    <li>✅ Быстрая загрузка</li>
+                    <li>✅ Кроссбраузерная совместимость</li>
+                    <li>✅ Индикатор загрузки</li>
+                    <li>✅ Обработка ошибок</li>
+                    <li>✅ Простая интеграция</li>
+                </ul>
+                
+                <h3>📱 Поддержка устройств</h3>
+                <ul>
+                    <li>Десктоп (Chrome, Firefox, Safari, Edge)</li>
+                    <li>Планшеты (iOS Safari, Android Chrome)</li>
+                    <li>Мобильные устройства (iOS Safari, Android Chrome)</li>
+                </ul>
+            </div>
+            
+            <!-- Сам виджет -->
+            <div id="sns-welcome-widget"></div>
+        </div>
+    </div>
+
+    <!-- Загрузка виджета -->
+    <script src="widget.min.js"></script>
+</body>
+</html>
