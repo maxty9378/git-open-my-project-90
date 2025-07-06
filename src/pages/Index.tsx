@@ -412,7 +412,7 @@ const Index = () => {
       >
         {schedule[currentDay]?.schedule.map(renderScheduleItem)}
         {/* Spacer for bottom navigation */}
-        <div className="h-24" />
+        <div className="h-32" />
       </div>
     </div>
   );
@@ -460,7 +460,7 @@ const Index = () => {
         </div>
         
         {/* Spacer for bottom navigation */}
-        <div className="h-24" />
+        <div className="h-32" />
       </div>
     </div>
   );
@@ -488,7 +488,7 @@ const Index = () => {
           <ModeratorCard />
           
           {/* Spacer for bottom navigation */}
-          <div className="h-24" />
+          <div className="h-32" />
         </div>
       </div>
     </div>
@@ -530,7 +530,7 @@ const Index = () => {
             </div>
             
             {/* Spacer for bottom navigation */}
-            <div className="h-24" />
+            <div className="h-32" />
           </div>
         </div>
       </div>
@@ -568,8 +568,10 @@ const Index = () => {
         <div className="flex justify-around items-center h-16 max-w-md mx-auto">
           <button
             onClick={() => setCurrentPage('schedule')}
-            className={`flex flex-col items-center justify-center w-1/4 h-full transition-all duration-200 rounded-xl ${
-              currentPage === 'schedule' ? 'text-[#02a374] bg-[#02a374]/10 scale-105' : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/30'
+            className={`flex flex-col items-center justify-center w-1/4 h-full transition-all duration-200 ${
+              currentPage === 'schedule' 
+                ? 'text-[#02a374]' 
+                : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/30 rounded-xl'
             }`}
           >
             <Calendar className="w-5 h-5 mb-1" />
@@ -577,8 +579,10 @@ const Index = () => {
           </button>
           <button
             onClick={() => setCurrentPage('info')}
-            className={`flex flex-col items-center justify-center w-1/4 h-full transition-all duration-200 rounded-xl ${
-              currentPage === 'info' ? 'text-[#02a374] bg-[#02a374]/10 scale-105' : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/30'
+            className={`flex flex-col items-center justify-center w-1/4 h-full transition-all duration-200 ${
+              currentPage === 'info' 
+                ? 'text-[#02a374]' 
+                : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/30 rounded-xl'
             }`}
           >
             <Info className="w-5 h-5 mb-1" />
@@ -586,8 +590,10 @@ const Index = () => {
           </button>
           <button
             onClick={() => setCurrentPage('favorites')}
-            className={`flex flex-col items-center justify-center w-1/4 h-full transition-all duration-200 rounded-xl ${
-              currentPage === 'favorites' ? 'text-[#02a374] bg-[#02a374]/10 scale-105' : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/30'
+            className={`flex flex-col items-center justify-center w-1/4 h-full transition-all duration-200 ${
+              currentPage === 'favorites' 
+                ? 'text-[#02a374]' 
+                : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/30 rounded-xl'
             }`}
           >
             <Heart className="w-5 h-5 mb-1" />
@@ -595,8 +601,10 @@ const Index = () => {
           </button>
           <button
             onClick={() => setCurrentPage('feedback')}
-            className={`flex flex-col items-center justify-center w-1/4 h-full transition-all duration-200 rounded-xl ${
-              currentPage === 'feedback' ? 'text-[#02a374] bg-[#02a374]/10 scale-105' : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/30'
+            className={`flex flex-col items-center justify-center w-1/4 h-full transition-all duration-200 ${
+              currentPage === 'feedback' 
+                ? 'text-[#02a374]' 
+                : 'text-gray-400 hover:text-gray-300 hover:bg-gray-800/30 rounded-xl'
             }`}
           >
             <Mail className="w-5 h-5 mb-1" />
