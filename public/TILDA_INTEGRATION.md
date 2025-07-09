@@ -32,7 +32,7 @@
 </button>
 
 <!-- Скрипт виджета -->
-<script src="https://sns-welcome.vercel.app/widget-tilda.min.js"></script>
+<script src="https://charming-salmiakki-34396f.netlify.app/widget-tilda.min.js"></script>
 ```
 
 ### Шаг 3: Сохраните и опубликуйте
@@ -69,7 +69,7 @@
 <div id="sns-welcome-widget"></div>
 
 <!-- Скрипт с автозапуском -->
-<script src="https://sns-welcome.vercel.app/widget-tilda.min.js"></script>
+<script src="https://charming-salmiakki-34396f.netlify.app/widget-tilda.min.js"></script>
 <script>
 // Автоматический запуск через 1 секунду после загрузки
 setTimeout(() => {

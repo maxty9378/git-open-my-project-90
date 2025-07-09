@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест SNS Welcome Widget</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .test-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        .test-button {
+            background: #02a374;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 10px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 10px rgba(2, 163, 116, 0.3);
+        }
+        .test-button:hover {
+            background: #028664;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(2, 163, 116, 0.4);
+        }
+        .test-button:active {
+            transform: translateY(0);
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #047857;
+            border: 1px solid #10b981;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #ef4444;
+        }
+        .status.info {
+            background: #dbeafe;
+            color: #1d4ed8;
+            border: 1px solid #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Тест SNS Welcome Widget</h1>
+        <p>Проверка работы виджета на текущем домене</p>
+        
+        <button class="test-button" onclick="testWidget()">
+            🚀 Запустить виджет
+        </button>
+        
+        <button class="test-button" onclick="checkWidget()" style="background: #6366f1;">
+            🔍 Проверить статус
+        </button>
+        
+        <div id="status" class="status info" style="display: none;">
+            Ожидание действий...
+        </div>
+        
+        <div style="margin-top: 30px; font-size: 12px; color: #6b7280;">
+            <p><strong>Домен:</strong> <span id="current-domain"></span></p>
+            <p><strong>Время:</strong> <span id="current-time"></span></p>
+        </div>
+    </div>
+
+    <!-- Контейнер для виджета -->
+    <div id="sns-welcome-widget"></div>
+
+    <!-- Подключение виджета -->
+    <script src="widget-tilda.min.js"></script>
+
+    <script>
+        // Отображение текущего домена и времени
+        document.getElementById('current-domain').textContent = window.location.origin;
+        document.getElementById('current-time').textContent = new Date().toLocaleString('ru-RU');
+        
+        function showStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            statusEl.style.display = 'block';
+        }
+        
+        function testWidget() {
+            showStatus('Запуск виджета...', 'info');
+            
+            try {
+                if (typeof SNSTildaWidget !== 'undefined') {
+                    SNSTildaWidget.init();
+                    showStatus('✅ Виджет запущен успешно!', 'success');
+                } else {
+                    showStatus('❌ SNSTildaWidget не найден', 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Ошибка: ${error.message}`, 'error');
+                console.error('Ошибка запуска виджета:', error);
+            }
+        }
+        
+        function checkWidget() {
+            showStatus('Проверка статуса виджета...', 'info');
+            
+            setTimeout(() => {
+                if (typeof SNSTildaWidget !== 'undefined') {
+                    const container = document.getElementById('sns-welcome-widget');
+                    const isInitialized = SNSTildaWidget.widget && SNSTildaWidget.widget.initialized;
+                    
+                    if (isInitialized) {
+                        showStatus('✅ Виджет инициализирован и готов к работе', 'success');
+                    } else if (container) {
+                        showStatus('ℹ️ Виджет загружен, но не инициализирован', 'info');
+                    } else {
+                        showStatus('❌ Контейнер виджета не найден', 'error');
+                    }
+                } else {
+                    showStatus('❌ SNSTildaWidget не загружен', 'error');
+                }
+            }, 500);
+        }
+        
+        // Автоматическая проверка при загрузке
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                checkWidget();
+            }, 1000);
+        });
+        
+        // Логирование для отладки
+        console.log('🧪 Тестовая страница загружена');
+        console.log('📍 Домен:', window.location.origin);
+        console.log('🕐 Время:', new Date().toISOString());
+    </script>
+</body>
+</html>
