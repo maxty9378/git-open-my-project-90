@@ -412,19 +412,21 @@
     function autoInit() {
         const widget = new TildaWelcomeWidget();
         
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => widget.init());
-        } else {
-            widget.init();
-        }
-        
+        // Экспортируем в глобальную область видимости с правильным именем
         window.SNSTildaWidget = {
             init: () => widget.init(),
             close: () => widget.close(),
             config: WIDGET_CONFIG,
             widget: widget
         };
+        
+        console.log('SNSTildaWidget готов к использованию');
     }
 
-    autoInit();
+    // Инициализация при загрузке DOM
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', autoInit);
+    } else {
+        autoInit();
+    }
 })();
