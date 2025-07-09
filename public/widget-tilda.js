@@ -8,7 +8,7 @@
     
     // Конфигурация виджета
     const WIDGET_CONFIG = {
-        baseUrl: window.location.origin,
+        baseUrl: 'https://charming-salmiakki-34396f.netlify.app',
         containerId: 'sns-welcome-widget',
         background: '#111827',
         loadingTimeout: 10000
