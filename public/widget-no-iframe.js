@@ -1,4 +1,3 @@
-
 (function() {
     'use strict';
     
@@ -164,13 +163,17 @@
         const contentElement = container.querySelector('.sns-welcome-widget-content');
         
         try {
-            // Пытаемся загрузить контент с сайта
-            const response = await fetch(`${WIDGET_CONFIG.baseUrl}?widget=true`, {
+            console.log('Попытка загрузки контента без iframe...');
+            
+            // Пытаемся загрузить контент с сайта напрямую
+            const response = await fetch(WIDGET_CONFIG.baseUrl, {
                 method: 'GET',
                 headers: {
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'User-Agent': 'SNSWelcomeWidget/1.0'
                 },
-                mode: 'cors'
+                mode: 'cors',
+                credentials: 'omit'
             });
             
             if (!response.ok) {
@@ -178,21 +181,57 @@
             }
             
             const html = await response.text();
+            console.log('Контент загружен успешно');
             
-            // Вставляем загруженный HTML
-            contentElement.innerHTML = html;
+            // Очищаем HTML от лишних элементов и оставляем только нужное
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
             
-            // Обрабатываем скрипты в загруженном контенте
-            const scripts = contentElement.querySelectorAll('script');
-            scripts.forEach(script => {
-                const newScript = document.createElement('script');
-                if (script.src) {
-                    newScript.src = script.src;
-                } else {
-                    newScript.textContent = script.textContent;
-                }
-                document.head.appendChild(newScript);
-            });
+            // Получаем основной контент
+            const bodyContent = doc.body;
+            if (bodyContent) {
+                contentElement.innerHTML = bodyContent.innerHTML;
+                
+                // Обрабатываем все скрипты
+                const scripts = contentElement.querySelectorAll('script');
+                scripts.forEach((script, index) => {
+                    try {
+                        const newScript = document.createElement('script');
+                        if (script.src) {
+                            newScript.src = script.src;
+                            newScript.async = true;
+                        } else if (script.textContent) {
+                            newScript.textContent = script.textContent;
+                        }
+                        
+                        // Добавляем скрипт в head
+                        document.head.appendChild(newScript);
+                        console.log(`Скрипт ${index + 1} добавлен`);
+                    } catch (error) {
+                        console.warn(`Ошибка при добавлении скрипта ${index + 1}:`, error);
+                    }
+                });
+                
+                // Обрабатываем стили
+                const styles = doc.querySelectorAll('style, link[rel="stylesheet"]');
+                styles.forEach((style, index) => {
+                    try {
+                        if (style.tagName === 'STYLE') {
+                            const newStyle = document.createElement('style');
+                            newStyle.textContent = style.textContent;
+                            document.head.appendChild(newStyle);
+                        } else if (style.tagName === 'LINK') {
+                            const newLink = document.createElement('link');
+                            newLink.rel = 'stylesheet';
+                            newLink.href = style.href;
+                            document.head.appendChild(newLink);
+                        }
+                        console.log(`Стиль ${index + 1} добавлен`);
+                    } catch (error) {
+                        console.warn(`Ошибка при добавлении стиля ${index + 1}:`, error);
+                    }
+                });
+            }
             
             // Скрываем индикатор загрузки
             if (loadingElement) {
@@ -202,7 +241,8 @@
             console.log('SNS Welcome Widget (без iframe) успешно загружен');
             
         } catch (error) {
-            console.error('Ошибка загрузки контента:', error);
+            console.error('Ошибка загрузки контента без iframe:', error);
+            console.log('Переключение на fallback с iframe...');
             
             // Fallback - используем iframe если прямая загрузка не работает
             contentElement.innerHTML = `
@@ -211,9 +251,24 @@
                     style="width: 100%; height: 100%; border: none; background: ${WIDGET_CONFIG.background};"
                     title="SNS Welcome Course"
                     allowfullscreen
-                    allow="accelerometer; autoplay; camera; clipboard-read; clipboard-write; encrypted-media; fullscreen; geolocation; gyroscope; magnetometer; microphone; midi; payment; picture-in-picture; publickey-credentials-get; screen-wake-lock; web-share; xr-spatial-tracking">
+                    allow="accelerometer; autoplay; camera; clipboard-read; clipboard-write; encrypted-media; fullscreen; geolocation; gyroscope; magnetometer; microphone; midi; payment; picture-in-picture; publickey-credentials-get; screen-wake-lock; web-share; xr-spatial-tracking"
+                    sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts allow-top-navigation allow-top-navigation-by-user-activation"
+                    loading="eager"
+                    referrerpolicy="strict-origin-when-cross-origin">
                 </iframe>
             `;
+            
+            // Добавляем обработчик загрузки iframe
+            const iframe = contentElement.querySelector('iframe');
+            if (iframe) {
+                iframe.addEventListener('load', function() {
+                    console.log('Fallback iframe загружен успешно');
+                });
+                
+                iframe.addEventListener('error', function() {
+                    console.error('Ошибка загрузки fallback iframe');
+                });
+            }
             
             if (loadingElement) {
                 loadingElement.style.display = 'none';
